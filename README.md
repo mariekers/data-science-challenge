@@ -12,21 +12,21 @@ The main idea is to get a decent working model up and running quickly, but some 
 
 Questions! 
 
-- If you used a different model, why'd you choose this model? 
+1. If you used a different model, why'd you choose this model? 
   
 I chose basic forecasting models because it's easier to diagnose why something could be off and it's easier to understand how to tune the parameters.  If I can spin up a basic model in a couple of hours to help me grasp the problem, I'll have an easier time building more complex models if I've understood the problem from the perspective of a model I've used before. 
 
 I also read that ARIMA is a better model for short term forecasting, while the LSTM is better for long term. Since we needed to predict just one minute into the future, it seemed like a win-win (simpler model, less compute, better predictions). 
 
-- What about it made it work for this problem? Is this model complex and if so, is the complexity necessary? 
+2. What about it made it work for this problem? Is this model complex and if so, is the complexity necessary? 
 
-  The model isn't exceptionally complex as it has relatively set parameters and tuning the model is pretty simple. 
+The model isn't exceptionally complex as it has relatively set parameters and tuning the model is pretty simple. 
 
-- Is it intuitive enough to explain it to a lay-person? 
+3. Is it intuitive enough to explain it to a lay-person? 
   
 I think so - most people can predict the season based on what temperature it is outside and how the plants look because they've experienced seasons before.  ARIMA does the same thing - it just recognizes repetitive data trends.
 
-- What was your optimizing metric? What were the hyperparameters and why'd you choose them?
+4. What was your optimizing metric? What were the hyperparameters and why'd you choose them?
   
 The model has relatively set hyperparameters (p,d,q)
        - p is the number of autoregressive terms,
@@ -35,23 +35,23 @@ The model has relatively set hyperparameters (p,d,q)
 
 Parameters are chosen based on full and partial autocorrelation analyses to see how many lags fall above the level of significance. 
 
-- Did you include any regularization strategies in your model? If so, why'd you choose the one you did?
+5. Did you include any regularization strategies in your model? If so, why'd you choose the one you did?
   
 I did use a looping function to see which parameters fit the SARIMA model the best, but for ARIMA I used the autocorrelations and judgement to tune.
 
-- Did you include visualizations? (everyone loves a good graphic)
+6. Did you include visualizations? (everyone loves a good graphic)
   
 I used a bit of matplotlib and I threw in an Altair cause I've been using them a lot with fastpages and they're fun!
 
-- How do we know the model is good? How understandable are the diagnostics? How will we know how good the model is predicting in production?
+7. How do we know the model is good? How understandable are the diagnostics? How will we know how good the model is predicting in production?
   
 The model predicts pretty well in the VERY SHORT TERM. I would do more work to check the test data. I would also set some assertions and pytests in the dagster pipeline.
 
-- If we see data for more than a single day's worth of prices, how do expect the model to perform? Will it generalize well to new data? Will retraining with this new data be an issue for this model?
+8. If we see data for more than a single day's worth of prices, how do expect the model to perform? Will it generalize well to new data? Will retraining with this new data be an issue for this model?
   
 Oh it'll definitely have diminishing returns.  Quickly.  Retraining the model wouldn't be an issue and would improve it over time. A different model would be better if you change the needed output - if you wanted to predict farther out, the ARIMA may not be as effective. 
 
-- **What question would you ask of the data, or add to this analysis that I haven't thought of?**
+9. **What question would you ask of the data, or add to this analysis that I haven't thought of?**
   
 Honestly, I want to see this performed against a full year of data (although maybe minute by minute instead). 
 
