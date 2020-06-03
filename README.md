@@ -10,15 +10,40 @@ The main challenge is this: can you make a model that actually works? You can us
 
 The main idea is to get a decent working model up and running quickly, but some other considerations you should think about are listed below. You don't have to answer all of the questions, but pick at least one or two and try to answer them (you can add your answers in this readme if you'd like).
 
-* Does this data set even make sense? What are the limitations of this data set?
-* Is the lookback window of 60 seconds helpful? What are its limitations? What other features would you want to see in this data set?
-* If you stuck with the neural network, what did you change to make it better? Did you change the architecture, did you change the optimizer? The learning rate? The activation function(s)? Why was the model stuck at `0` with an incredibly high root mean squared error?
-* If you used a different model, why'd you choose this model? What about it made it work for this problem? Is this model complex and if so, is the complexity necessary? Is it intuitive enough to explain it to a lay-person? What was your optimizing metric? What were the hyperparameters and why'd you choose them?
-* Did you include any regularization strategies in your model? If so, why'd you choose the one you did?
-* Did you include visualizations? (everyone loves a good graphic)
-* How do we know the model is good? How understandable are the diagnostics? How will we know how good the model is predicting in production?
-* If we see data for more than a single day's worth of prices, how do expect the model to perform? Will it generalize well to new data? Will retraining with this new data be an issue for this model?
-* **What question would you ask of the data, or add to this analysis that I haven't thought of?**
+Questions! 
+
+- If you used a different model, why'd you choose this model? 
+I chose basic forecasting models because it's easier to diagnose why something could be off and it's easier to understand how to tune the parameters.  If I can spin up a basic model in a couple of hours to help me grasp the problem, I'll have an easier time building more complex models if I've understood the problem from the perspective of a model I've used before. 
+
+I also read that ARIMA is a better model for short term forecasting, while the LSTM is better for long term. Since we needed to predict just one minute into the future, it seemed like a win-win (simpler model, less compute, better predictions). 
+
+- What about it made it work for this problem? Is this model complex and if so, is the complexity necessary? The model isn't exceptionally complex as it has relatively set parameters and tuning the model is pretty simple. 
+
+- Is it intuitive enough to explain it to a lay-person? 
+I think so - most people can predict the season based on what temperature it is outside and how the plants look because they've experienced seasons before.  ARIMA does the same thing - it just recognizes repetitive data trends.
+
+What was your optimizing metric? What were the hyperparameters and why'd you choose them?
+The model has relatively set hyperparameters (p,d,q)
+       - p is the number of autoregressive terms,
+       - d is the number of nonseasonal differences needed for stationarity, and
+       - q is the number of lagged forecast errors in the prediction equation. 
+
+Parameters are chosen based on full and partial autocorrelation analyses to see how many lags fall above the level of significance. 
+
+- Did you include any regularization strategies in your model? If so, why'd you choose the one you did?
+I did use a looping function to see which parameters fit the SARIMA model the best, but for ARIMA I used the autocorrelations and judgement to tune.
+
+- Did you include visualizations? (everyone loves a good graphic)
+I used a bit of matplotlib and I threw in an Altair cause I've been using them a lot with fastpages and they're fun!
+
+- How do we know the model is good? How understandable are the diagnostics? How will we know how good the model is predicting in production?
+The model predicts pretty well in the VERY SHORT TERM. I would do more work to check the test data.
+
+- If we see data for more than a single day's worth of prices, how do expect the model to perform? Will it generalize well to new data? Will retraining with this new data be an issue for this model?
+Oh it'll definitely have diminishing returns.  Quickly.  Retraining the model wouldn't be an issue and would improve it over time. A different model would be better if you change the needed output - if you wanted to predict farther out, the ARIMA may not be as effective. 
+
+- **What question would you ask of the data, or add to this analysis that I haven't thought of?**
+Honestly, I want to see this performed against a full year of data (although maybe minute by minute instead). 
 
 
 ## Note on Dependencies
